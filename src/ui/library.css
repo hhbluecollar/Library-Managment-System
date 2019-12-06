@@ -1,0 +1,75 @@
+
+#login-top-container {
+ -fx-background-color:  linear-gradient(#deb887, gray);
+ -fx-border-color: white;
+ -fx-border-radius: 20;
+ -fx-padding: 10 10 10 10;
+ -fx-background-radius: 20;
+  
+}
+
+#spalsh-box {
+ -fx-background-color:  linear-gradient(lightgray, gray);
+ -fx-border-color: white;
+ -fx-border-radius: 20;
+ -fx-padding: 10 10 10 10;
+ -fx-background-radius: 20;
+  
+}/* 
+#welcome-container {
+ -fx-background-color:  linear-gradient(lightgray, gray);
+ -fx-border-color: white;
+ -fx-border-radius: 20;
+ -fx-padding: 10 10 10 10;
+ -fx-background-radius: 20;
+  
+}*/
+#addbook-top-container {
+/* -fx-background-color:  linear-gradient(lightgray, gray);*/
+ -fx-border-color: white;
+ -fx-border-radius: 20;
+ -fx-padding: 10 10 10 10;
+ -fx-background-radius: 20;
+  
+}
+.label {
+   -fx-text-fill: #111111;
+   
+}
+
+#top-container {
+ -fx-background-color:  linear-gradient(#964B00,gray );
+  
+}
+   
+ #left-container {
+ fx-background-color:  linear-gradient(lightgray, gray);
+ -fx-border-color: #000099;
+ -fx-border-radius: 20;
+ -fx-padding: 10 10 10 10;
+ -fx-background-radius: 20;
+  
+}
+#rightt-container {
+ -fx-background-color:  linear-gradient(lightgray, gray);
+ -fx-border-color: white;
+ -fx-border-radius: 20;
+ -fx-padding: 10 10 10 10;
+ -fx-background-radius: 20;
+  
+}
+#spalsh-box {
+ -fx-background-color:  linear-gradient(lightgray, gray);
+ -fx-border-color: white;
+ -fx-border-radius: 20;
+ -fx-padding: 10 10 10 10;
+ -fx-background-radius: 20;
+  
+}
+.hyperlink {
+   -fx-text-fill: #000099;
+   -fx-font-size: 20px;
+   -fx-font-weight: bold;
+   -fx-underline: false;
+}
+
