@@ -9,6 +9,7 @@ import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
 import dataaccess.User;
 import ui.NewStart;
+import ui.WelcomeWindow;
 
 public class SystemController implements ControllerInterface {
 	public static Auth currentAuth = null;
@@ -52,6 +53,10 @@ public class SystemController implements ControllerInterface {
 			NewStart.checkoutStatus.setDisable(false);
 		}
 		
+ 	    WelcomeWindow.INSTANCE.init();
+ 	    NewStart.rightContainer.add(WelcomeWindow.getGrid(),0,0);
+ 	    NewStart.topContainer.setCenter( NewStart.rightContainer);
+		
 	}
 	@Override
 	public List<String> allMemberIds() {
@@ -70,7 +75,27 @@ public class SystemController implements ControllerInterface {
 	}
 	
 	@Override
-	public void addMember(LibraryMember librMem) {
+	public void addMember(LibraryMember librMem) throws LibrarySystemException {
+		//check if any field is empty
+		//check of telephone no is an integer
+		
+		if(librMem.getMemberId().trim().isEmpty() ||
+			librMem.getFirstName().trim().isEmpty()      ||
+			librMem.getLastName().trim().isEmpty()       ||
+			librMem.getTelephone().trim().isEmpty()      ||
+			librMem.getAddress().getState().trim().isEmpty() ||
+			librMem.getAddress().getStreet().trim().isEmpty()||
+			librMem.getAddress().getCity().trim().isEmpty()  ||
+			librMem.getAddress().getZip().trim().isEmpty()) {
+			throw new LibrarySystemException("All member fields must be provided");
+		}
+		
+		try {
+			Integer.parseInt(librMem.getTelephone());
+		}catch(NumberFormatException e){
+			throw new LibrarySystemException("Telephone number must be numeric");
+
+		}
 		DataAccess da = new DataAccessFacade();
 		da.saveNewMember(librMem);
 	}
@@ -94,9 +119,14 @@ public class SystemController implements ControllerInterface {
 		da.saveNewBook(book);
 	}
 	@Override
-	public LibraryMember searchMemberById(String memId) {
+	public LibraryMember searchMemberById(String memId) throws LibrarySystemException {
 		// TODO Auto-generated method stub
-		 return new DataAccessFacade().searchMemberById(memId);
+		if(memId.isEmpty())
+			throw new LibrarySystemException("Member id should be provided.");
+		LibraryMember member = new DataAccessFacade().searchMemberById(memId);
+		if(member==null)
+			throw new LibrarySystemException("Memeber with id "+memId+" is not found.");
+		 return member ;
 	}	
 	//-------------------------------------------------------
 		@Override
@@ -113,7 +143,7 @@ public class SystemController implements ControllerInterface {
 				isAvailable = bk[i].isAvailable();
 
 				if(isAvailable == true) {
-					nextAvailCopy = bk[i].getCopyNum();
+					nextAvailCopy = bk[i].getCopyNum(); //for check
 					Copy = bk[i];
 					break;
 				}

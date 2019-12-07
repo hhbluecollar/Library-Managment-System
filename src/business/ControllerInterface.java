@@ -11,11 +11,11 @@ public interface ControllerInterface {
 	public List<String> allMemberIds();
 	public List<String> allBookIds();
 	
-	public void addMember(LibraryMember lib);
+	public void addMember(LibraryMember lib) throws LibrarySystemException;
 	public void addCopy(BookCopy bookCopy);
 	public Book searchBookByIsbn(String isbn);
 	public void addBook(Book book);
-	public LibraryMember searchMemberById(String memId);
+	public LibraryMember searchMemberById(String memId) throws LibrarySystemException;
 	
 	public boolean checkoutBook(String memID, String isbn);
 	public void addBookCopy(Book book, int copyNum);

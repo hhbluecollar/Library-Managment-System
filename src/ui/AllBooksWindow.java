@@ -49,20 +49,14 @@ public class AllBooksWindow extends Stage implements LibWindow {
 		
 		ta = new TextArea();
 		grid.add(ta, 0,1);
-        Button logoutBtn = new Button("Logout");
-        logoutBtn.setOnAction(new EventHandler<ActionEvent>() {
+		
+		NewStart.logoutBtn.setOnAction(new EventHandler<ActionEvent>() {
         	@Override 
         	public void handle(ActionEvent e) {
         		NewStart.resetWindow();
           	}
         });
-        HBox hBack = new HBox(10);
-        hBack.setAlignment(Pos.BOTTOM_LEFT);
-        hBack.getChildren().add(logoutBtn);
-        grid.add(hBack, 0, 2);
-		Scene scene = new Scene(grid);
-		scene.getStylesheets().add(getClass().getResource("library.css").toExternalForm());
-        setScene(scene);
+		
         isInitialized(true);
 	}
 }

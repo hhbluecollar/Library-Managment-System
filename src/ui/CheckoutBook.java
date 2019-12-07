@@ -104,21 +104,11 @@ public class CheckoutBook extends Stage implements LibWindow {
         	}
         });
 
-        Button logoutBtn = new Button("Logout");
-        logoutBtn.setOnAction(new EventHandler<ActionEvent>() {
+        NewStart.logoutBtn.setOnAction(new EventHandler<ActionEvent>() {
         	@Override 
         	public void handle(ActionEvent e) {
         		NewStart.resetWindow();
           	}
-        });
-        HBox hBack = new HBox(10);
-        hBack.setAlignment(Pos.BOTTOM_LEFT);
-        hBack.getChildren().add(logoutBtn);
-        grid.add(hBack, 0, 7);
-        
-        Scene scene = new Scene(grid);
-        scene.getStylesheets().add(getClass().getResource("library.css").toExternalForm());
-        setScene(scene);
-        
+        });        
     }	
 }

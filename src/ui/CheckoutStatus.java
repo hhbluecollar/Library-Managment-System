@@ -129,25 +129,14 @@ public class CheckoutStatus extends Stage implements LibWindow {
         	}
         });
         
-        Button logoutBtn = new Button("Logout");
-        logoutBtn.setOnAction(new EventHandler<ActionEvent>() {
+        NewStart.logoutBtn.setOnAction(new EventHandler<ActionEvent>() {
         	@Override 
         	public void handle(ActionEvent e) {
         		NewStart.resetWindow();
           	}
-        });
-        HBox hBack = new HBox(10);
-        hBack.setAlignment(Pos.BOTTOM_LEFT);
-        hBack.getChildren().add(logoutBtn);
-        grid.add(hBack, 0, 5);
-       
-        Scene scene = new Scene(grid);
-        scene.getStylesheets().add(getClass().getResource("library.css").toExternalForm());
-        setScene(scene);
-        
+        });         
     }
-    
-    
+        
     public Node row( String labelText, Node field ) {
         HBox row = new HBox( 10 );
         Label label = new Label( labelText );

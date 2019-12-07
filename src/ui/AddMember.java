@@ -95,9 +95,7 @@ public class AddMember extends Stage implements LibWindow{
 	        grid.add(streetTextField, 1, 5);
 	        grid.add(cityTextField, 1, 6);
 	        grid.add(statetTextField, 1, 7);
-	        grid.add(zipTextField, 1, 8);
-       
-	        
+	        grid.add(zipTextField, 1, 8);               
 
 	        Button addMemberBtn = new Button("Add Member");
 	        HBox hbBtn = new HBox(10);
@@ -138,25 +136,13 @@ public class AddMember extends Stage implements LibWindow{
 	        	}
 	        });
 	        
-	        Button logoutBtn = new Button("Logout");
-	        logoutBtn.setOnAction(new EventHandler<ActionEvent>() {
+	        NewStart.logoutBtn.setOnAction(new EventHandler<ActionEvent>() {
 	        	@Override 
 	        	public void handle(ActionEvent e) {
 	        		NewStart.resetWindow();
 	          	}
-	        });
-	        HBox hBack = new HBox(10);
-	        hBack.setAlignment(Pos.BOTTOM_LEFT);
-	        hBack.getChildren().add(logoutBtn);
-	        grid.add(hBack, 0, 13);
-	       
-	        Scene scene = new Scene(grid);
-	        scene.getStylesheets().add(getClass().getResource("library.css").toExternalForm());
-	        setScene(scene);
-	        
-	    }
-		
-		
+	        }); 	        
+	    }			
 }
 
 

@@ -1,21 +1,50 @@
 
-#login-top-container {
- -fx-background-color:  linear-gradient(#deb887, gray);
- -fx-border-color: white;
+#top-container {
+ -fx-background-color:  linear-gradient(#964B00,white );
+ -fx-border-color: #111111;
  -fx-border-radius: 20;
- -fx-padding: 10 10 10 10;
+ -fx-background-radius: 20;  
+}
+ 
+#spalsh-box {
+ -fx-border-radius: 20;
+ -fx-background-radius: 20; 
+-fx-background-color: rgba(87.1, 72.2, 52.9, 0.8);
+}
+
+.label {
+   -fx-text-fill: #111111;
+   
+}   
+ #left-container {
+ -fx-background-image: url("wood2.jpg");
+ -fx-border-color: #111111;
+ -fx-border-radius: 20;
  -fx-background-radius: 20;
   
 }
-
-#spalsh-box {
- -fx-background-color:  linear-gradient(lightgray, gray);
- -fx-border-color: white;
+#right-container {
+ -fx-border-color: #111111;
  -fx-border-radius: 20;
- -fx-padding: 10 10 10 10;
  -fx-background-radius: 20;
+ -fx-background-image: url("library.jpg");
+ /*-fx-background-repeat: stretch; */  
+}
+
+.hyperlink {
+   -fx-text-fill: #000099;
+   -fx-font-size: 20px;
+   -fx-font-weight: bold;
+   -fx-underline: false;
+   -fx-text-fill: #111111;
+   
+}
+/* 
+#top-container {
+ -fx-background-color:  linear-gradient(#964B00,white );
   
-}/* 
+}*/
+/* 
 #welcome-container {
  -fx-background-color:  linear-gradient(lightgray, gray);
  -fx-border-color: white;
@@ -24,52 +53,3 @@
  -fx-background-radius: 20;
   
 }*/
-#addbook-top-container {
-/* -fx-background-color:  linear-gradient(lightgray, gray);*/
- -fx-border-color: white;
- -fx-border-radius: 20;
- -fx-padding: 10 10 10 10;
- -fx-background-radius: 20;
-  
-}
-.label {
-   -fx-text-fill: #111111;
-   
-}
-
-#top-container {
- -fx-background-color:  linear-gradient(#964B00,gray );
-  
-}
-   
- #left-container {
- fx-background-color:  linear-gradient(lightgray, gray);
- -fx-border-color: #000099;
- -fx-border-radius: 20;
- -fx-padding: 10 10 10 10;
- -fx-background-radius: 20;
-  
-}
-#rightt-container {
- -fx-background-color:  linear-gradient(lightgray, gray);
- -fx-border-color: white;
- -fx-border-radius: 20;
- -fx-padding: 10 10 10 10;
- -fx-background-radius: 20;
-  
-}
-#spalsh-box {
- -fx-background-color:  linear-gradient(lightgray, gray);
- -fx-border-color: white;
- -fx-border-radius: 20;
- -fx-padding: 10 10 10 10;
- -fx-background-radius: 20;
-  
-}
-.hyperlink {
-   -fx-text-fill: #000099;
-   -fx-font-size: 20px;
-   -fx-font-weight: bold;
-   -fx-underline: false;
-}
-

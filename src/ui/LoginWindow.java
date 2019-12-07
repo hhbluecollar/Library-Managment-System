@@ -1,5 +1,7 @@
 package ui;
 
+import javax.swing.JFrame;
+
 import business.ControllerInterface;
 import business.LoginException;
 import business.SystemController;
@@ -12,17 +14,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Reflection;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class LoginWindow extends Stage implements LibWindow {
+	
+	
+	
+	private static final long serialVersionUID = -6285527764386970939L;
+
 	public static final LoginWindow INSTANCE = new LoginWindow();
 	
 	private boolean isInitialized = false;
@@ -48,7 +52,7 @@ public class LoginWindow extends Stage implements LibWindow {
     
     public void init() { 
     	grid = new GridPane();
-        grid.setId("login-top-container");
+        grid.setId("top-container");
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
         grid.setVgap(10);
@@ -93,41 +97,23 @@ public class LoginWindow extends Stage implements LibWindow {
         messageBox.getChildren().add(messageBar);;
         grid.add(messageBox, 1, 6);
         
-       // grid.setAlignment(Pos.BASELINE_CENTER);
         loginBtn.setOnAction(new EventHandler<ActionEvent>() {
         	@Override
         	public void handle(ActionEvent e) {
         		try {
+        			NewStart.logoutBtn.setVisible(true);
         			ControllerInterface c = new SystemController();
-        			c.login(userTextField.getText().trim(), pwBox.getText().trim());
+        			c.login(userTextField.getText().trim(), pwBox.getText().trim());        			
         			messageBar.setFill(Start.Colors.green);
              	    messageBar.setText("Login successful");
-             	    WelcomeWindow.INSTANCE.init();
-             	    NewStart.topContainer.setCenter(WelcomeWindow.getGrid());
-             	    //NewStart.topContainer
+
         		} catch(LoginException ex) {
         			messageBar.setFill(Start.Colors.red);
         			messageBar.setText("Error! " + ex.getMessage());
         		}
         	   
         	}
-        });
-
-//        Button logoutBtn = new Button("Logout");
-//        logoutBtn.setOnAction(new EventHandler<ActionEvent>() {
-//        	@Override
-//        	public void handle(ActionEvent e) {
-//        		//Start.hideAllWindows();
-//        		//Start.primStage().show();
-//        	}
-//        });
-//        HBox hBack = new HBox(10);
-//        hBack.setAlignment(Pos.BOTTOM_LEFT);
-//        hBack.getChildren().add(logoutBtn);
-//        grid.add(hBack, 0, 7);
-        Scene scene = new Scene(grid);
-        scene.getStylesheets().add(getClass().getResource("library.css").toExternalForm());
-        setScene(scene);
+        });   
         
     }	
 }

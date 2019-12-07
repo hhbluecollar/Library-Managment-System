@@ -42,7 +42,7 @@ public class Start extends Application {
 	}
 	
 	private static Stage[] allWindows = { 
-		LoginWindow.INSTANCE,
+		//LoginWindow.INSTANCE,
 		AllMembersWindow.INSTANCE,	
 		AllBooksWindow.INSTANCE
 	};

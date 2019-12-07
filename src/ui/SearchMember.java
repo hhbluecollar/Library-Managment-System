@@ -1,26 +1,20 @@
 package ui;
 
-import business.Book;
-import business.BookCopy;
 import business.ControllerInterface;
 import business.LibraryMember;
-import business.LoginException;
+import business.LibrarySystemException;
 import business.SystemController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -108,8 +102,6 @@ public class SearchMember extends Stage implements LibWindow {
         		try {
         			ControllerInterface c = new SystemController();
         			LibraryMember member = c.searchMemberById(memberIdField.getText().trim());
-        			if(member.equals(null))
-        				throw new Exception();
         			
         			//Populate the fields
         	         fNameField.setText(member.getFirstName());
@@ -123,32 +115,21 @@ public class SearchMember extends Stage implements LibWindow {
         		
         			messageBar.setFill(Start.Colors.green);
              	    messageBar.setText("Member successfully found");
-        		} catch(Exception ex) {
+        		} catch(NullPointerException | LibrarySystemException ex) {
         			messageBar.setFill(Start.Colors.red);
         			messageBar.setText("Error! " + ex.getMessage());
         		}        	   
         	}
         });
         
-        Button logoutBtn = new Button("Logout");
-        logoutBtn.setOnAction(new EventHandler<ActionEvent>() {
+        NewStart.logoutBtn.setOnAction(new EventHandler<ActionEvent>() {
         	@Override 
         	public void handle(ActionEvent e) {
         		NewStart.resetWindow();
           	}
-        });
-        HBox hBack = new HBox(10);
-        hBack.setAlignment(Pos.BOTTOM_LEFT);
-        hBack.getChildren().add(logoutBtn);
-        grid.add(hBack, 0, 5);
-       
-        Scene scene = new Scene(grid);
-        scene.getStylesheets().add(getClass().getResource("library.css").toExternalForm());
-        setScene(scene);
-        
-    }
-    
-    
+        });        
+    }    
+    // label and textfield combiner
     public Node row( String labelText, Node field ) {
         HBox row = new HBox( 10 );
         Label label = new Label( labelText );
@@ -156,5 +137,9 @@ public class SearchMember extends Stage implements LibWindow {
         row.getChildren().addAll( label, field );
         return row;
     }
+	public Text getMessageBar() {
+		return messageBar;
+	}
+    
 }
 

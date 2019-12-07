@@ -13,6 +13,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -33,7 +34,7 @@ public class NewStart extends Application{
 	
         public  static Hyperlink login = new Hyperlink("Login");
         public  static Hyperlink addMember =  new Hyperlink("Add Memeber");
-        public  static Hyperlink searchEditMem =  new Hyperlink("Search\\ Edit Memeber");
+        public  static Hyperlink searchEditMem =  new Hyperlink("Search\\Edit Memeber");
         public  static Hyperlink checkoutBook = new Hyperlink("Checkout Book");
         public  static Hyperlink addBook = new Hyperlink("Add Book");
         public  static Hyperlink checkoutStatus = new Hyperlink("Check Book Status");
@@ -41,6 +42,10 @@ public class NewStart extends Application{
         public  static Hyperlink allBookId = new Hyperlink("All Books ID");
         public  static Hyperlink addBookCopy = new Hyperlink("Add Book Copy");
         public  static BorderPane topContainer;
+        public  static GridPane leftContainer;
+        public  static GridPane rightContainer;        
+        public static Button  logoutBtn = new Button("Logout");        
+
 	
 	public static void main(String[] args) {
 			launch(args);
@@ -55,34 +60,35 @@ public class NewStart extends Application{
 			static Color red = Color.FIREBRICK;
 		}
 
-		private static Stage[] allWindows = { 
+/*		private static Stage[] allWindows = { 
 			LoginWindow.INSTANCE,
 			AllMembersWindow.INSTANCE,	
 			AllBooksWindow.INSTANCE,
-		};
-		
-		public static void hideAllWindows() {
-			primStage.hide();
-			for(Stage st: allWindows) {
-				st.hide();
-			}
-		}				
-		
+		};	
+*/						
 		//************************************
 		public static void resetWindow() {
     		SystemController.currentAuth=null;
-     	    WelcomeWindow.INSTANCE.init();
-     	    NewStart.topContainer.setCenter(WelcomeWindow.getGrid());
-			NewStart.checkoutBook.setDisable(true);
-			NewStart.addBook.setDisable(true);
-			NewStart.addBookCopy.setDisable(true);
-			NewStart.allBookId.setDisable(true);
-			NewStart.addMember.setDisable(true);
-			NewStart.searchEditMem.setDisable(true);
-			NewStart.allMemeberId.setDisable(true);
-			NewStart.login.setDisable(true);
-			NewStart.checkoutStatus.setDisable(true);
-     	    NewStart.login.setDisable(false);
+    		LoginWindow.INSTANCE.init();
+			topContainer.setCenter(LoginWindow.getGrid());
+			LoginWindow.INSTANCE.clear();
+
+			checkoutBook.setDisable(true);
+			addBook.setDisable(true);
+			addBookCopy.setDisable(true);
+			allBookId.setDisable(true);
+			addMember.setDisable(true);
+			searchEditMem.setDisable(true);
+			allMemeberId.setDisable(true);
+			checkoutStatus.setDisable(true);
+     	    login.setDisable(false);
+     	    logoutBtn.setVisible(false);
+
+//			if(!WelcomeWindow.INSTANCE.isInitialized()) {
+//				WelcomeWindow.INSTANCE.init();
+//
+//			}
+			//rightContainer.add(WelcomeWindow.getGrid(), 0, 0);
 		}
 		
 		//************************************
@@ -93,29 +99,28 @@ public class NewStart extends Application{
 					
 			topContainer= new BorderPane();	
 			topContainer.setId("top-container");
-
-	        GridPane leftContainer = new GridPane();	        
+	        leftContainer = new GridPane();	        
 			leftContainer.setId("left-container");
 			leftContainer.setPrefSize(300, 600);
 			leftContainer.setHgap(10);
 			leftContainer.setVgap(10);
 			leftContainer.setPadding(new Insets(10,10,10,10));
+			
 			//Populate left container
 			leftContainer.add(login, 1, 4); 
-			leftContainer.add(addMember, 1, 5); 	addMember.setDisable(true);
-			leftContainer.add(searchEditMem, 1, 6);	searchEditMem.setDisable(true);
-			leftContainer.add(checkoutBook, 1, 7);	checkoutBook.setDisable(true);
-			leftContainer.add(addBook, 1, 8);		addBook.setDisable(true);
-			leftContainer.add(checkoutStatus, 1, 9);checkoutStatus.setDisable(true);
-			leftContainer.add(allMemeberId, 1, 10);	allMemeberId.setDisable(true);
-			leftContainer.add(allBookId, 1, 11);		allBookId.setDisable(true);
-			leftContainer.add(addBookCopy, 1, 12);	addBookCopy.setDisable(true);			
+			leftContainer.add(addMember, 1, 5); 	 addMember.setDisable(true);
+			leftContainer.add(searchEditMem, 1, 6);	 searchEditMem.setDisable(true);
+			leftContainer.add(checkoutBook, 1, 7);	 checkoutBook.setDisable(true);
+			leftContainer.add(addBook, 1, 8);		 addBook.setDisable(true);
+			leftContainer.add(checkoutStatus, 1, 9); checkoutStatus.setDisable(true);
+			leftContainer.add(allMemeberId, 1, 10);	 allMemeberId.setDisable(true);
+			leftContainer.add(allBookId, 1, 11);	 allBookId.setDisable(true);
+			leftContainer.add(addBookCopy, 1, 12);	 addBookCopy.setDisable(true);			
+			leftContainer.add(logoutBtn, 1, 17);     logoutBtn.setVisible(false);
+			logoutBtn.setMinSize(10, 2); 			
 			
-			GridPane rightContainer = new GridPane();
+			rightContainer = new GridPane();
 			rightContainer.setId("right-container");
-			rightContainer.setPrefSize(500, 600);
-
-			rightContainer.setPadding(new Insets(10,10,10,10));
 			
 		    final EventHandler<ActionEvent> myHandler = new EventHandler<ActionEvent>(){
 		    	
@@ -155,8 +160,9 @@ public class NewStart extends Application{
 					if(clickedLink.equals(searchEditMem)) {
 						if(!SearchMember.INSTANCE.isInitialized()) {
 							SearchMember.INSTANCE.init();
-		    			}
-						SearchMember.INSTANCE.clear();
+						}
+						SearchMember.INSTANCE.getMessageBar().setFill(Start.Colors.green);
+						SearchMember.INSTANCE.getMessageBar().setText("Insert member id to search.");			    								
 		    			topContainer.setCenter(SearchMember.getGrid());
 					}
 					if(clickedLink.equals(checkoutBook)) {
@@ -172,9 +178,7 @@ public class NewStart extends Application{
 		    			}
 						CheckoutStatus.INSTANCE.clear();
 		    			topContainer.setCenter(CheckoutStatus.getGrid());
-					}
-					
-					
+					}			
 				}		    
 		    };
 		    
@@ -184,29 +188,8 @@ public class NewStart extends Application{
 		    checkoutBook.setOnAction(myHandler);
 		    addBook.setOnAction(myHandler);
 		    checkoutStatus.setOnAction(myHandler);
-		   // allMemeberId.setOnAction(myHandler);
-		   // allBookI.setOnAction(myHandler);
 		    addBookCopy.setOnAction(myHandler);
 
-			VBox imageHolder = new VBox();
-			Image image = new Image("ui/library.jpg", 500, 550, false, false);
-
-	        // simply displays in ImageView the image as is
-	        ImageView iv = new ImageView();
-	        iv.setImage(image);
-	        imageHolder.getChildren().add(iv);
-	        imageHolder.setAlignment(Pos.BOTTOM_CENTER);
-	        HBox splashBox = new HBox();
-	        splashBox.setId("spalsh-box");
-	        Label splashLabel = new Label("The Library System");
-	        splashLabel.setFont(Font.font("Trajan Pro", FontWeight.BOLD, 30));
-	        splashBox.getChildren().add(splashLabel);
-	        splashBox.setAlignment(Pos.TOP_CENTER);
-			
-	        rightContainer.add(splashBox,0,1);
-	        rightContainer.add(imageHolder,0,2);
-			
-			
 			login.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(ActionEvent e) {
@@ -214,13 +197,11 @@ public class NewStart extends Application{
 	    				LoginWindow.INSTANCE.init();
 	    			}
 	    			LoginWindow.INSTANCE.clear();
-	    		//	LoginWindow.INSTANCE.show();
 	    			topContainer.setCenter(LoginWindow.getGrid());				
 
 	            }
 	        });			
 								
-			//MenuItem bookIds = new MenuItem("All Book Ids");
 			allBookId.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(ActionEvent e) {
@@ -237,12 +218,10 @@ public class NewStart extends Application{
 						sb.append(s + "\n");
 					}
 					AllBooksWindow.INSTANCE.setData(sb.toString());
-
 	    			topContainer.setCenter(AllBooksWindow.getGrid());				
 	            }
 			});
 			
-			//MenuItem memberIds = new MenuItem("All Member Ids");
 			allMemeberId.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(ActionEvent e) {
@@ -263,14 +242,16 @@ public class NewStart extends Application{
 	            }
 			});	
 		
-			topContainer.setLeft(leftContainer);
 			
 			if(!WelcomeWindow.INSTANCE.isInitialized()) {
 				WelcomeWindow.INSTANCE.init();
 			}
 			WelcomeWindow.INSTANCE.clear();
-			topContainer.setCenter(WelcomeWindow.getGrid());
-			Scene scene = new Scene(topContainer, 800, 600);
+			rightContainer.add(WelcomeWindow.getGrid(), 0, 0);
+			topContainer.setLeft(leftContainer);
+			topContainer.setCenter(rightContainer);				
+
+			Scene scene = new Scene(topContainer,800,600);
 			primaryStage.setScene(scene);
 			scene.getStylesheets().add(getClass().getResource("library.css").toExternalForm());
 			primaryStage.show();
