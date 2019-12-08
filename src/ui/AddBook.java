@@ -3,11 +3,15 @@ package ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.omg.CORBA.PRIVATE_MEMBER;
+
 import business.Address;
 import business.Author;
 import business.Book;
 import business.ControllerInterface;
+import business.LibrarySystemException;
 import business.SystemController;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -15,6 +19,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -46,14 +51,14 @@ public class AddBook extends Stage implements LibWindow {
 		      fNameField.clear();;
 		      lNameField.clear();
 		      telephoneField.clear();
-		       bioTextArea.clear();
+		      bioTextArea.clear();
 		     
 		      streetTextField.clear();
 		      cityTextField.clear() ;
 		      statetTextField.clear();
 		      zipTextField.clear() ;	
 		}
-     private List<Author> authors = new ArrayList<>();
+    private List<Author> authors = new ArrayList<>();
 	
     private static GridPane grid;	
 	public static GridPane getGrid() {
@@ -93,27 +98,27 @@ public class AddBook extends Stage implements LibWindow {
 
         TextField isbnTextField;
         TextField titleTextField ;
-        TextField maxCheckoutTextField;    
-               
+        ComboBox<Integer> maxCheckoutComboBox;    
         VBox bookPane = new VBox( 10 );
         bookPane.getChildren().addAll(
                 row( "ISBN:", isbnTextField = new TextField() ),
                 row( "Title:", titleTextField = new TextField() ),
-                row( "Max Checkout Length:", maxCheckoutTextField = new TextField() )
-                
+                row( "Max Checkout Length:", maxCheckoutComboBox = new ComboBox<>() )                
         );
-        
+        //Initialize the items and select a default value 
+        maxCheckoutComboBox.getItems().addAll(7,21);
+        maxCheckoutComboBox.setValue(7);
+
         VBox authorPpane = new VBox( 10 );
         authorPpane.getChildren().addAll(       
 
                 row( "First Name:", fNameField = new TextField() ),
                 row( "Last Name:", lNameField = new TextField() ),
                 row( "Telephone No:", telephoneField = new TextField()),
-                row( "Bio:", bioTextArea = new TextArea() )
-                
+                row( "Bio:", bioTextArea = new TextArea() )                
         );
-        VBox addressPpane = new VBox( 10 );
-        addressPpane.getChildren().addAll(    
+        VBox addressPane = new VBox( 10 );
+        addressPane.getChildren().addAll(    
                 row( "Street:", streetTextField = new TextField()),
                 row( "City:", cityTextField = new TextField()),
                 row( "State:", statetTextField = new TextField()),
@@ -122,7 +127,7 @@ public class AddBook extends Stage implements LibWindow {
         );
         grid.add(bookPane, 0, 1,2,2);
         grid.add(authorPpane, 0, 3,2,2);
-        grid.add(addressPpane, 0, 5,2,2);
+        grid.add(addressPane, 0, 5,2,2);
 
         //***************************************
 
@@ -140,24 +145,32 @@ public class AddBook extends Stage implements LibWindow {
         addBookBtn.setOnAction(new EventHandler<ActionEvent>() {
         	@Override
         	public void handle(ActionEvent e) {
-        		try {  			
-        			Address address = new Address(streetTextField.getText().trim(), 
-							cityTextField.getText().trim(), 
-							statetTextField.getText().trim(), 
-							zipTextField.getText().trim());      								   
-	        		Author author = new Author(fNameField.getText().trim(),
-					  lNameField.getText().trim(),
-					  telephoneField.getText().trim(),
-					  address, bioTextArea.getText().trim());
-        			Book book = new  Book(isbnTextField.getText().trim(), titleTextField.getText().trim(), 
-        							      Integer.parseInt(maxCheckoutTextField.getText().trim()), authors);
+        		try {  		
+	        		//***********************************************
+        				if(isbnTextField.getText().trim().isEmpty()||
+        				   titleTextField.getText().trim().isEmpty()) {
+        	    			
+        					throw new LibrarySystemException("All book fields must be provided.");	
+        				}        				
+        					
+        				if(!isbnTextField.getText().trim().matches("[0-9-]*"))
+    				
+    					    throw new LibrarySystemException("The ISBN format is not correct number.");	
+    			
+        				authorRead();
+	        		//***********************************************	        		    		
+	        			        		
+        			Book book = new  Book(isbnTextField.getText().trim(), 
+        								  titleTextField.getText().trim(), 
+        							      maxCheckoutComboBox.getValue(),
+        							      authors);
         			ControllerInterface c = new SystemController();
         			c.addBook(book);
         			messageBar.setFill(Start.Colors.green);
              	    messageBar.setText("Adding Book successful");
-        		} catch(Exception ex) {
+        		} catch(LibrarySystemException ex) {
         			messageBar.setFill(Start.Colors.red);
-        			messageBar.setText("Error! " + ex.getMessage());
+        			messageBar.setText(ex.getMessage());
         		}        	   
         	}
         });
@@ -178,31 +191,56 @@ public class AddBook extends Stage implements LibWindow {
         return row;
     }
 
+    Button additionalAutorBtn = new Button("Additional Author" );
     public Node buttons() {
         HBox buttons = new HBox( 10 );
-        Button addAnotherAutor = new Button("Add More Author" );
-        addAnotherAutor.setOnAction(new EventHandler<ActionEvent>() {
+        
+    additionalAutorBtn.setOnAction(new EventHandler<ActionEvent>() {
         		
 	        	public void handle(ActionEvent e) {	        		
-	        	
-	        		messageBar.setText( "Please add the next author details."); 
-	        	
-	        		Address address = new Address(streetTextField.getText().trim(), 
-	        										cityTextField.getText().trim(), 
-	        										statetTextField.getText().trim(), 
-	        										zipTextField.getText().trim());      								   
-					Author author = new Author(fNameField.getText().trim(),
-											  lNameField.getText().trim(),
-											  telephoneField.getText().trim(),
-											  address, bioTextArea.getText().trim());
-					authors.add(author);
-					clearTextFields();
-					System.out.println("The authors of this book are: "+author);
-	        	}}
-        		);    							
-        		
-        buttons.getChildren().addAll( addAnotherAutor);
+	        		try {	        			
+							authorRead();
+							clearTextFields();
+					} catch (LibrarySystemException ex) {
+	        			messageBar.setFill(Start.Colors.red);
+	        			messageBar.setText(ex.getMessage());					}
+	        	}
+   }
+        		                );             		
+
+        buttons.getChildren().addAll( additionalAutorBtn);
       
         return buttons;
     }
+    
+    private final void authorRead() throws LibrarySystemException {		
+
+		if(
+			streetTextField.getText().trim().isEmpty()|| cityTextField.getText().trim().isEmpty() ||
+			statetTextField.getText().trim().isEmpty() || zipTextField.getText().trim().isEmpty()  ||
+			fNameField.getText().trim().isEmpty() || lNameField.getText().trim().isEmpty() ||
+			bioTextArea.getText().trim().isEmpty() ||telephoneField.getText().trim().isEmpty()) {
+			
+			throw new LibrarySystemException("All author fields must be provided.");					
+		}	       		
+		try {
+			Integer.parseInt(telephoneField.getText().trim());
+		} catch (NumberFormatException e) {
+			throw new LibrarySystemException("The telephone digits must be integers.");
+		}
+		try {
+			Integer.parseInt(zipTextField.getText().trim());
+		} catch (NumberFormatException e) {
+			throw new LibrarySystemException("Zip format is incorrect.");
+		}
+	Address address = new Address(  streetTextField.getText().trim(), 
+			cityTextField.getText().trim(), 
+			statetTextField.getText().trim(), 
+			zipTextField.getText().trim());      								   
+   Author author = new Author(		fNameField.getText().trim(),
+	   		lNameField.getText().trim(),
+	   		telephoneField.getText().trim(),
+	   		address, bioTextArea.getText().trim());
+	
+}
 }

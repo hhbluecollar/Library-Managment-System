@@ -8,12 +8,14 @@ final public class CheckoutRecord  implements Serializable{
 
 	private static final long serialVersionUID = -966150412315735623L;
 	private List<CheckoutEntry> checkoutEntry;// = new ArrayList<>();
-	
+	//1 to many relationship checkoutRecord holds the relation
 	public CheckoutRecord() { 
+		//addEntry(entry); 
 		checkoutEntry = new ArrayList<>();
 	}
 	
 	public void addEntry(CheckoutEntry entry) {
+
 		checkoutEntry.add(entry);
 	}
 

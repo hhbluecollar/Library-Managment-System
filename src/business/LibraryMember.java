@@ -23,13 +23,16 @@ final public class LibraryMember extends Person implements Serializable {
 	
 	
 	//-------------------------------------------------------------------------
-//	public void checkout(BookCopy copy, LocalDate date, LocalDate returnDate) {
-//		copy.changeAvailability();
-//		checkoutRecord = new CheckoutRecord();
-//		// checkoutEntry = new CheckoutEntry(date, returnDate, copy);
-//	}
+	public void checkout(BookCopy copy, LocalDate date, LocalDate returnDate) {
+		CheckoutEntry checkoutEntry = new CheckoutEntry(date, returnDate, copy);
+		checkoutRecord.addEntry(checkoutEntry);
+		copy.changeAvailability();
+
+	}
 	
 	public CheckoutRecord getCheckoutRecord() {
+		if(checkoutRecord == null)
+			checkoutRecord = new CheckoutRecord();
 		return checkoutRecord;
 	}
 

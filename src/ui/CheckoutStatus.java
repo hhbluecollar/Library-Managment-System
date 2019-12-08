@@ -1,3 +1,4 @@
+
 package ui;
 
 import java.util.Collections;
@@ -70,9 +71,6 @@ public class CheckoutStatus extends Stage implements LibWindow {
         
         TextField memberIdField;   
         TextArea statusArea;
-       // TextField authorTextField ;
-      //  TextField dueDateTextField;
-       // TextField checkOutTextField ;
         
         VBox statusPane = new VBox( 10 );
         statusPane.getChildren().addAll(
@@ -83,8 +81,9 @@ public class CheckoutStatus extends Stage implements LibWindow {
        
         grid.add(statusPane, 0, 1);
                
-        Button searchBtn = new Button("Check Records");
+        Button searchBtn = new Button("Check Record");
         HBox hbBtn = new HBox(10);
+        searchBtn.setDefaultButton(true);
         hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn.getChildren().add(searchBtn);
         grid.add(hbBtn, 0, 6);
@@ -100,31 +99,16 @@ public class CheckoutStatus extends Stage implements LibWindow {
         		try {        			
         			//Populate the fields
         					ControllerInterface ci = new SystemController();
-
-        					LibraryMember member = ci.searchMemberById(memberIdField.getText());
-        					List<CheckoutEntry> checkOuts = member.getCheckoutRecord().getCheckoutEntry();
-               	           System.out.println(checkOuts.size());
-
-        					StringBuilder sb = new StringBuilder();
-        					int bkNo =0;
-        					sb.append("The checkout records for "+member.getLastName()+" "+member.getFirstName()+" are: \n");
-       					System.out.println(checkOuts.size());
-        					for(CheckoutEntry s: checkOuts) {
-        						bkNo++;
-        						sb.append(bkNo+". "+s.getBookCopy().getBook().getTitle()+"\n");
-        						sb.append("\t\t"+"Checkout Date: "+s.getCheckoutdate()+"\n");
-        						sb.append("\t\t" +"Due date: "+s.getDueDate()+ "\n");
-        						sb.append("\t\t" +"Max checkout length: "+s.getBookCopy().getBook().getMaxCheckoutLength()+ "\n");
-        					}
-        					statusArea.setText(sb.toString());
+        					String string = ci.checkoutStatus(memberIdField.getText());
+        					statusArea.setText(string);
         	    			NewStart.topContainer.setCenter(getGrid()
-        	    		);        			
+        	    		);      			
         		
         			messageBar.setFill(Start.Colors.green);
              	    messageBar.setText("Record successfully found");
         		} catch(Exception ex) {
         			messageBar.setFill(Start.Colors.red);
-        			messageBar.setText("Error! " + ex.getMessage());
+        			messageBar.setText( ex.getMessage());
         		}        	   
         	}
         });

@@ -1,5 +1,6 @@
 package ui;
 
+import business.Address;
 import business.ControllerInterface;
 import business.LibraryMember;
 import business.LibrarySystemException;
@@ -86,16 +87,51 @@ public class SearchMember extends Stage implements LibWindow {
         grid.add(addressPpane, 0, 2);  
                
         Button searchBtn = new Button("Search");
-        HBox hbBtn = new HBox(10);
+        Button updatBtn = new Button("Update");
+        HBox hbBtn = new HBox(20);
         hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
-        hbBtn.getChildren().add(searchBtn);
-        grid.add(hbBtn, 1, 3);
+        hbBtn.getChildren().add(searchBtn);        
+        hbBtn.getChildren().add(updatBtn);
+        grid.add(hbBtn, 0, 4);        
 
         HBox messageBox = new HBox(10);
         messageBox.setAlignment(Pos.BOTTOM_RIGHT);
         messageBox.getChildren().add(messageBar);;
-        grid.add(messageBox, 0, 4);
+        grid.add(messageBox, 0, 8);
         
+        updatBtn.setOnAction(new EventHandler<ActionEvent>() {
+        	@Override             	
+        	
+        	public void handle(ActionEvent e) {
+        		try {        			
+        			
+        			Address address = new Address(streetTextField.getText().trim(), 
+        										  cityTextField.getText().trim(), 
+        										  statetTextField.getText().trim(), 
+        										  zipTextField.getText().trim()
+        										  );
+        			LibraryMember member = new LibraryMember(
+        					memberIdField.getText().trim(),
+        					fNameField.getText().trim(),
+        					lNameField.getText().trim(),
+        					telephoneField.getText().trim(),
+        									address
+        									);
+        			ControllerInterface c = new SystemController();
+        			c.addMember(member,false);
+        			messageBar.setFill(Start.Colors.green);
+             	    messageBar.setText("Member successfuly updated");
+             	    memberIdField.setEditable(true);
+        		} catch(Exception ex) {
+        			messageBar.setFill(Start.Colors.red);
+        			messageBar.setText(ex.getMessage());
+        		}        	   
+        	}        	
+        });
+              
+        
+        //-------------------------------------------------------
+         
         searchBtn.setOnAction(new EventHandler<ActionEvent>() {
         	@Override
         	public void handle(ActionEvent e) {
@@ -115,12 +151,15 @@ public class SearchMember extends Stage implements LibWindow {
         		
         			messageBar.setFill(Start.Colors.green);
              	    messageBar.setText("Member successfully found");
+             	    memberIdField.setEditable(false);
         		} catch(NullPointerException | LibrarySystemException ex) {
         			messageBar.setFill(Start.Colors.red);
-        			messageBar.setText("Error! " + ex.getMessage());
+        			messageBar.setText(ex.getMessage());
         		}        	   
         	}
-        });
+        }); 
+          
+         //----------------------------------------------------------
         
         NewStart.logoutBtn.setOnAction(new EventHandler<ActionEvent>() {
         	@Override 

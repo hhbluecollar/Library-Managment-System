@@ -99,6 +99,8 @@ public class AddMember extends Stage implements LibWindow{
 
 	        Button addMemberBtn = new Button("Add Member");
 	        HBox hbBtn = new HBox(10);
+	        addMemberBtn.setDefaultButton(true);
+
 	        hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
 	        hbBtn.getChildren().add(addMemberBtn);
 	        grid.add(hbBtn, 1, 10);
@@ -106,7 +108,7 @@ public class AddMember extends Stage implements LibWindow{
 	        HBox messageBox = new HBox(10);
 	        messageBox.setAlignment(Pos.BOTTOM_RIGHT);
 	        messageBox.getChildren().add(messageBar);;
-	        grid.add(messageBox, 1, 12);
+	        grid.add(messageBox, 1, 12,2,2);
 	        
 	        addMemberBtn.setOnAction(new EventHandler<ActionEvent>() {
 	        	@Override
@@ -116,7 +118,8 @@ public class AddMember extends Stage implements LibWindow{
 	        			Address address = new Address(streetTextField.getText().trim(), 
 	        										  cityTextField.getText().trim(), 
 	        										  statetTextField.getText().trim(), 
-	        										  zipTextField.getText().trim());
+	        										  zipTextField.getText().trim()
+	        										  );
 	        			LibraryMember member = new LibraryMember(
 	        									membreTextField.getText().trim(),
 	        									fNameTextField.getText().trim(),
@@ -125,12 +128,12 @@ public class AddMember extends Stage implements LibWindow{
 	        									address
 	        									);
 	        			ControllerInterface c = new SystemController();
-	        			c.addMember(member);
+	        			c.addMember(member,true);
 	        			messageBar.setFill(Start.Colors.green);
 	             	    messageBar.setText("Member successfuly Added");
 	        		} catch(Exception ex) {
 	        			messageBar.setFill(Start.Colors.red);
-	        			messageBar.setText("Error! " + ex.getMessage());
+	        			messageBar.setText(ex.getMessage());
 	        		}
 	        	   
 	        	}

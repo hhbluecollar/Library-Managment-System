@@ -1,7 +1,5 @@
 package ui;
 
-import javax.swing.JFrame;
-
 import business.ControllerInterface;
 import business.LoginException;
 import business.SystemController;
@@ -9,7 +7,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -77,21 +74,11 @@ public class LoginWindow extends Stage implements LibWindow {
 
         Button loginBtn = new Button("Log in");
         HBox hbBtn = new HBox(10);
+        loginBtn.setDefaultButton(true);
         hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn.getChildren().add(loginBtn);
         grid.add(hbBtn, 1, 4);
-
-        
-//        //Reflection for gridPane
-//        Reflection r = new Reflection();
-//        r.setFraction(0.7f);
-//        grid.setEffect(r);
-//        
-//        //DropShadow effect 
-//        DropShadow dropShadow = new DropShadow();
-//        dropShadow.setOffsetX(5);
-//        dropShadow.setOffsetY(5);
-         
+       
         HBox messageBox = new HBox(10);
         messageBox.setAlignment(Pos.BOTTOM_RIGHT);
         messageBox.getChildren().add(messageBar);;
@@ -109,7 +96,7 @@ public class LoginWindow extends Stage implements LibWindow {
 
         		} catch(LoginException ex) {
         			messageBar.setFill(Start.Colors.red);
-        			messageBar.setText("Error! " + ex.getMessage());
+        			messageBar.setText(ex.getMessage());
         		}
         	   
         	}

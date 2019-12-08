@@ -6,27 +6,16 @@ import java.util.List;
 
 import business.ControllerInterface;
 import business.SystemController;
-import dataaccess.Auth;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 
@@ -44,7 +33,7 @@ public class NewStart extends Application{
         public  static BorderPane topContainer;
         public  static GridPane leftContainer;
         public  static GridPane rightContainer;        
-        public static Button  logoutBtn = new Button("Logout");        
+        public  static Button  logoutBtn = new Button("Logout");        
 
 	
 	public static void main(String[] args) {
@@ -69,9 +58,10 @@ public class NewStart extends Application{
 		//************************************
 		public static void resetWindow() {
     		SystemController.currentAuth=null;
-    		LoginWindow.INSTANCE.init();
-			topContainer.setCenter(LoginWindow.getGrid());
-			LoginWindow.INSTANCE.clear();
+    		//if(WelcomeWindow.INSTANCE==null)
+    			WelcomeWindow.INSTANCE.init();
+			topContainer.setCenter(WelcomeWindow.getGrid());
+			WelcomeWindow.INSTANCE.clear();
 
 			checkoutBook.setDisable(true);
 			addBook.setDisable(true);
@@ -83,20 +73,13 @@ public class NewStart extends Application{
 			checkoutStatus.setDisable(true);
      	    login.setDisable(false);
      	    logoutBtn.setVisible(false);
-
-//			if(!WelcomeWindow.INSTANCE.isInitialized()) {
-//				WelcomeWindow.INSTANCE.init();
-//
-//			}
-			//rightContainer.add(WelcomeWindow.getGrid(), 0, 0);
 		}
 		
 		//************************************
 		@Override
 		public void start(Stage primaryStage) {
 			primStage = primaryStage;
-			primaryStage.setTitle("The Library System");
-					
+			primaryStage.setTitle("Legeta Library System");
 			topContainer= new BorderPane();	
 			topContainer.setId("top-container");
 	        leftContainer = new GridPane();	        
@@ -134,7 +117,6 @@ public class NewStart extends Application{
 		    			}
 		    			LoginWindow.INSTANCE.clear();
 		    			topContainer.setCenter(LoginWindow.getGrid());
-
 					}
 					if(clickedLink.equals(addMember)) {
 						if(!AddMember.INSTANCE.isInitialized()) {
@@ -182,7 +164,6 @@ public class NewStart extends Application{
 				}		    
 		    };
 		    
-		   // login.setOnAction(myHandler);
 		    addMember.setOnAction(myHandler);
 		    searchEditMem.setOnAction(myHandler);
 		    checkoutBook.setOnAction(myHandler);
@@ -197,8 +178,7 @@ public class NewStart extends Application{
 	    				LoginWindow.INSTANCE.init();
 	    			}
 	    			LoginWindow.INSTANCE.clear();
-	    			topContainer.setCenter(LoginWindow.getGrid());				
-
+	    			topContainer.setCenter(LoginWindow.getGrid());			
 	            }
 	        });			
 								
@@ -211,7 +191,6 @@ public class NewStart extends Application{
 					ControllerInterface ci = new SystemController();
 					List<String> ids = ci.allBookIds();
 					Collections.sort(ids);
-					System.out.println(ids);
 
 					StringBuilder sb = new StringBuilder();
 					for(String s: ids) {
@@ -231,12 +210,10 @@ public class NewStart extends Application{
 					ControllerInterface ci = new SystemController();
 					List<String> ids = ci.allMemberIds();
 					Collections.sort(ids);
-					System.out.println(ids);
 					StringBuilder sb = new StringBuilder();
 					for(String s: ids) {
 						sb.append(s + "\n");
 					}
-					System.out.println(sb.toString());
 					AllMembersWindow.INSTANCE.setData(sb.toString());
 	    			topContainer.setCenter(AllMembersWindow.getGrid());				
 	            }

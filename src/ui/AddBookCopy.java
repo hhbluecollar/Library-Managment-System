@@ -46,6 +46,7 @@ public class AddBookCopy extends Stage implements LibWindow {
     private AddBookCopy () {}
     
     public void init() { 
+    	
         grid = new GridPane();
         grid.setId("top-container");
         grid.setAlignment(Pos.CENTER);
@@ -58,22 +59,18 @@ public class AddBookCopy extends Stage implements LibWindow {
         grid.add(scenetitle, 0, 0, 2, 1);
 
         Label lblISBN = new Label("ISBN:");
-        Label lblCopy = new Label("Number of Copy:");
-        
-       
+        Label lblCopy = new Label("Number of Copy:");     
         TextField isbnTextField = new TextField();
         TextField copyTextField = new TextField();
        
         grid.add(lblISBN, 0, 1);
-        grid.add(lblCopy, 0, 2);
-       
+        grid.add(lblCopy, 0, 2);       
         grid.add(isbnTextField, 1, 1);
-        grid.add(copyTextField, 1, 2);
-       
+        grid.add(copyTextField, 1, 2);   
         
-
         Button addCopyBtn = new Button("Add Copy");
         HBox hbBtn = new HBox(10);
+        addCopyBtn.setDefaultButton(true);
         hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn.getChildren().add(addCopyBtn);
         grid.add(hbBtn, 1, 3);
@@ -81,22 +78,22 @@ public class AddBookCopy extends Stage implements LibWindow {
         HBox messageBox = new HBox(10);
         messageBox.setAlignment(Pos.BOTTOM_RIGHT);
         messageBox.getChildren().add(messageBar);;
-        grid.add(messageBox, 1, 4);
+        grid.add(messageBox, 0, 4,3,1);
         
         addCopyBtn.setOnAction(new EventHandler<ActionEvent>() {
         	@Override
         	public void handle(ActionEvent e) {
         		try {
         			ControllerInterface c = new SystemController();
-        			Book book = c.searchBookByIsbn(isbnTextField.getText().trim());
-        			int copy = Integer.parseInt(copyTextField.getText());	
-        			c.addBookCopy(book, copy);  
-        			System.out.println(book.getNumCopies());
+        			String copyNum = copyTextField.getText();	
+        			String isbn = isbnTextField.getText().trim();
+        			c.addBookCopy(isbn, copyNum); 
+        			
         			messageBar.setFill(Start.Colors.green);
              	    messageBar.setText("Adding copy successfully");
         		} catch(Exception ex) {
         			messageBar.setFill(Start.Colors.red);
-        			messageBar.setText("Error! " + ex.getMessage());
+        			messageBar.setText(ex.getMessage());
         		}
         	   
         	}

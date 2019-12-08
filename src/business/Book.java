@@ -18,10 +18,10 @@ final public class Book implements Serializable {
 	private String isbn;
 	private String title;
 	private int maxCheckoutLength;
-	public Book(String isbn, String title, int maxCheckoutLength, List<Author> authors) {
+	public Book(String isbn, String title, int maxLength, List<Author> authors) {
 		this.isbn = isbn;
 		this.title = title;
-		this.maxCheckoutLength = maxCheckoutLength;
+		this.maxCheckoutLength = maxLength;
 		this.authors = Collections.unmodifiableList(authors);
 		copies = new BookCopy[]{new BookCopy(this, 1, true)};	
 	}
@@ -109,7 +109,7 @@ final public class Book implements Serializable {
 		}
 		return null;
 	}
-	public int getMaxCheckoutLength() {
+	public int  getMaxCheckoutLength() {
 		return maxCheckoutLength;
 	}
 

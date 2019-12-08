@@ -4,12 +4,13 @@ import business.SystemController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 
@@ -45,12 +46,24 @@ public class WelcomeWindow extends Stage implements LibWindow{
 		        grid.setVgap(10);
 				
 		        VBox splashVBox = new VBox();
-		        splashVBox.setMinSize(500, 20);
+		        splashVBox.setMinSize(500, 30);
 		        splashVBox.setId("spalsh-box");
 			   // splashVBox.setBackground(Background.EMPTY);
 		        splashVBox.autosize();
-		        Label splashLabelSub = new Label("Please select a task");
-		        Label splashLabel = new Label("Welcome To Yegna Library System");
+		        Text splashLabelSub = new Text("Please select a task");
+		        Text splashLabel = new Text("Welcome To Legeta Library System");
+		        
+		        //DropShadow effect 
+		        DropShadow dropShadow = new DropShadow();
+		        dropShadow.setOffsetX(5);
+		        dropShadow.setOffsetY(5);
+		         
+		        //Adding text and DropShadow effect to it
+		        splashLabelSub.setTextAlignment(TextAlignment.CENTER);
+		        splashLabelSub.setEffect(dropShadow);		        
+		        splashLabel.setTextAlignment(TextAlignment.CENTER);
+		        splashLabel.setEffect(dropShadow);
+		        
 		        
 		        if(SystemController.currentAuth==null)
 		        	splashLabelSub.setText("Please Login");

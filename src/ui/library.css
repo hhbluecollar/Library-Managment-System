@@ -1,6 +1,6 @@
 
 #top-container {
- -fx-background-color:  linear-gradient(#964B00,white );
+ -fx-background-color:  linear-gradient(#964B00,grey );
  -fx-border-color: #111111;
  -fx-border-radius: 20;
  -fx-background-radius: 20;  
@@ -16,6 +16,14 @@
    -fx-text-fill: #111111;
    
 }   
+.button {
+    -fx-background-radius: 30, 30, 29, 28;
+    -fx-padding: 3px 10px 3px 10px;
+    -fx-background-color: linear-gradient(orange, orangered );
+}
+.button:focused{
+    -fx-background-color: gray;
+    }
  #left-container {
  -fx-background-image: url("wood2.jpg");
  -fx-border-color: #111111;
@@ -39,11 +47,20 @@
    -fx-text-fill: #111111;
    
 }
-/* 
-#top-container {
- -fx-background-color:  linear-gradient(#964B00,white );
+
+#welcome-container {
+ -fx-background-image: url("library.jpg");
   
-}*/
+}
+
+.text-field{
+   -fx-padding: 1,1,1,1;
+   -fx-border-color: grey;
+   -fx-border-width: 2;
+   -fx-border-radius: 6;
+   -fx-border: gone;
+}
+
 /* 
 #welcome-container {
  -fx-background-color:  linear-gradient(lightgray, gray);
