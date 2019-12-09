@@ -1,5 +1,7 @@
 package dataaccess;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -7,6 +9,9 @@ import java.util.List;
 import business.Address;
 import business.Author;
 import business.Book;
+import business.BookCopy;
+import business.CheckoutEntry;
+import business.CheckoutRecord;
 import business.LibraryMember;
 
 /**
@@ -59,6 +64,8 @@ public class TestData {
 		libraryMember = new LibraryMember("1004", "Ricardo", "Montalbahn", "641-472-2871", addresses.get(7));
 		members.add(libraryMember);
 		
+		//libraryMember.getCheckoutRecord().setCheckoutEntry(allEntry);
+		
 		DataAccessFacade.loadMemberMap(members);	
 	}
 	
@@ -107,4 +114,28 @@ public class TestData {
 			add(new User("111", "111", Auth.BOTH));
 		}
 	};
+	//---------------------------------------------------------
+	
+//	@SuppressWarnings("serial")
+//	List<BookCopy> allCopy = new ArrayList<BookCopy>() {
+//		{
+//			add(new BookCopy(allBooks.get(0),1,true));
+//			add(new BookCopy(allBooks.get(0),1,true));
+//			add(new BookCopy(allBooks.get(0),1,true));
+//			add(new BookCopy(allBooks.get(0),1,true));
+//
+//		}
+//	};
+//    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MMM-yyyy");
+//	List<CheckoutEntry> allEntry = new ArrayList<CheckoutEntry>() {
+//		{	
+//			add(new CheckoutEntry(LocalDate.parse("12-Nov-2019",formatter), LocalDate.parse("01-Dec-2019",formatter), allCopy.get(0)));
+//			add(new CheckoutEntry(LocalDate.parse("12-Nov-2019",formatter), LocalDate.parse("01-Dec-2019",formatter), allCopy.get(1)));
+//			add(new CheckoutEntry(LocalDate.parse("12-Nov-2019",formatter), LocalDate.parse("01-Dec-2019",formatter), allCopy.get(2)));
+//			add(new CheckoutEntry(LocalDate.parse("12-Nov-2019",formatter), LocalDate.parse("01-Dec-2019",formatter), allCopy.get(3)));
+//		}
+//	};
+	
+	
+	
 }

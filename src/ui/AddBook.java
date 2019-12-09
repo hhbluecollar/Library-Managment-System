@@ -122,8 +122,6 @@ public class AddBook extends Stage implements LibWindow {
         grid.add(authorPpane, 0, 3,2,2);
         grid.add(addressPane, 0, 5,2,2);
 
-        //***************************************
-
         Button addBookBtn = new Button("Add Book");
         HBox hbBtn = new HBox(10);
         hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
@@ -146,7 +144,7 @@ public class AddBook extends Stage implements LibWindow {
         					throw new LibrarySystemException("All book fields must be provided.");	
         				}        
         				
-        				if(c.searchBookByIsbn(isbnTextField.getText().trim())!=null)
+        				if(c.searchBookByIsbnIsAvaialable(isbnTextField.getText().trim()))
         					throw new LibrarySystemException("The book is already in the system!");
 
         					
@@ -154,7 +152,7 @@ public class AddBook extends Stage implements LibWindow {
     				
     					    throw new LibrarySystemException("The ISBN format is not correct number.");	
     			
-        				authorRead();
+        			authorRead();
 	        			        		
         			Book book = new  Book(isbnTextField.getText().trim(), 
         								  titleTextField.getText().trim(), 
@@ -219,11 +217,10 @@ public class AddBook extends Stage implements LibWindow {
 			
 			throw new LibrarySystemException("All author fields must be provided.");					
 		}	       		
-		try {
-			Integer.parseInt(telephoneField.getText().trim());
-		} catch (NumberFormatException e) {
-			throw new LibrarySystemException("The telephone digits must be integers.");
-		}
+				
+		if(!telephoneField.getText().trim().matches("[0-9-]*"))
+			throw new LibrarySystemException("Telephone format is not correct.");
+		
 		try {
 			Integer.parseInt(zipTextField.getText().trim());
 		} catch (NumberFormatException e) {
@@ -237,6 +234,7 @@ public class AddBook extends Stage implements LibWindow {
 	   		lNameField.getText().trim(),
 	   		telephoneField.getText().trim(),
 	   		address, bioTextArea.getText().trim());
+   authors.add(author);
 	
 }
 }

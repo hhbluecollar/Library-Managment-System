@@ -3,23 +3,17 @@ package business;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import javax.swing.JComboBox.KeySelectionManager;
-
-import com.sun.corba.se.impl.encoding.OSFCodeSetRegistry.Entry;
-import com.sun.javafx.collections.MappingChange.Map;
-import com.sun.org.apache.xalan.internal.xsltc.runtime.BasisLibrary;
-
 import dataaccess.Auth;
 import dataaccess.DataAccess;
 import dataaccess.DataAccessFacade;
 import dataaccess.User;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import ui.CopyOverDue;
 import ui.NewStart;
 import ui.WelcomeWindow;
 
@@ -42,6 +36,7 @@ public class SystemController implements ControllerInterface {
 			NewStart.searchEditMem.setDisable(false);
 			NewStart.checkoutStatus.setDisable(false);
 			NewStart.allMemeberId.setDisable(false);
+			NewStart.overDueCheck.setDisable(false);
 			NewStart.login.setDisable(true);			
 		}	
 		
@@ -63,6 +58,8 @@ public class SystemController implements ControllerInterface {
 			NewStart.allMemeberId.setDisable(false);
 			NewStart.login.setDisable(true);
 			NewStart.checkoutStatus.setDisable(false);
+			NewStart.overDueCheck.setDisable(false);
+
 		}
 		
  	    WelcomeWindow.INSTANCE.init();
@@ -100,24 +97,21 @@ public class SystemController implements ControllerInterface {
 			throw new LibrarySystemException("All fields must be provided.");
 		}
 		
-		try {
-			Integer.parseInt(librMem.getTelephone());
-		}catch(NumberFormatException e){
-			throw new LibrarySystemException("Telephone number must be numeric.");
+			if(!librMem.getTelephone().trim().matches("[0-9-]*"))
+				throw new LibrarySystemException("Telephone format is not correct.");
 
-		}
 		DataAccess da = new DataAccessFacade();
 		if(addType==true)
 			da.saveNewMember(librMem);
 		da.updateMember(librMem.getMemberId(), librMem);
 	}
 	
-	@Override
-	public void addCopy(BookCopy bookCopy) {
-		// TODO Auto-generated method stub
-		DataAccess da = new DataAccessFacade();
-		da.saveNewBookCopy(bookCopy);
-	}
+//	@Override
+//	public void addCopy(BookCopy bookCopy) {
+//		// TODO Auto-generated method stub
+//		DataAccess da = new DataAccessFacade();
+//		da.saveNewBookCopy(bookCopy);
+//	}
 	@Override
 	public Book searchBookByIsbn(String isbn) throws LibrarySystemException {
 		Book book = new DataAccessFacade().searchBookByIsbn(isbn);
@@ -126,6 +120,16 @@ public class SystemController implements ControllerInterface {
 		
 		return book ;
 	}
+	
+	@Override
+	public boolean searchBookByIsbnIsAvaialable(String isbn) {
+		Book book = new DataAccessFacade().searchBookByIsbn(isbn);
+		if(book!=null)
+			return true;
+		return false;
+	}
+		
+	
 	@Override
 	public void addBook(Book book) throws LibrarySystemException {
 		DataAccess da = new DataAccessFacade();
@@ -172,6 +176,15 @@ public class SystemController implements ControllerInterface {
 			throw new LibrarySystemException("Memeber with id "+memId+" is not found.");
 
 		return member ;
+	}	
+	
+	
+	@Override
+	public boolean searchMemberByIdIsAvaialable(String memId)  {
+		LibraryMember member = new DataAccessFacade().searchMemberById(memId);
+		if(member!=null)
+			return true;
+		return false;
 	}	
 	
 	public String checkoutStatus(String memberId) throws LibrarySystemException {
@@ -237,14 +250,12 @@ public class SystemController implements ControllerInterface {
 		public void addBookCopy(String isbn, String copyNum) throws LibrarySystemException  {
 
 			if(copyNum.isEmpty() || isbn.isEmpty() )
-				throw new LibrarySystemException("All fields should be filled.");
-			try {
+				throw new LibrarySystemException("All fields should be provided.");
 				
-						isbn.matches("^[0-9-]+$");
+			if(!isbn.matches("[0-9-]*"))
 					
-				}catch (NumberFormatException ex) {
-					throw new LibrarySystemException("The ISBN format is not correct number.");	
-				}
+				throw new LibrarySystemException("The ISBN format is not correct.");	
+			
 			try {
 				Integer.parseInt(copyNum);
 			
@@ -262,25 +273,79 @@ public class SystemController implements ControllerInterface {
 			}catch(LibrarySystemException ex) {
 				throw new LibrarySystemException("The book was not found.");
 			}
-			BookCopy bookCopy = new  BookCopy(book, Integer.parseInt(copyNum),true);
+			//BookCopy bookCopy = new  BookCopy(book, Integer.parseInt(copyNum),true);
 			DataAccess da = new DataAccessFacade();
-			da.saveNewBookCopy(bookCopy);
+			da.saveNewBookCopy(book);
 		}	
 		
 		
-		public void overdueCheck(String isbn) throws LibrarySystemException {
+		@SuppressWarnings("unchecked")
+		public void  overdueCheck(String isbn) throws LibrarySystemException {
+						
+			DataAccess da = new DataAccessFacade();			 
 			Book book = searchBookByIsbn(isbn);
-			List<Book> checkoutBookList = new ArrayList<>();
-
-			for(BookCopy bookCopy: book.getCopies()) {
-				if(bookCopy.isAvailable()==false)
-					checkoutBookList.add(book);
+			
+			HashMap<String, LibraryMember> memeberHashMap = da.readMemberMap();
+			List<BookOverDue> overDueList =  new ArrayList<BookOverDue>();
+			List<LibraryMember> memeberList = new ArrayList<LibraryMember>();
+			
+			memeberList.addAll(memeberHashMap.values());
+			
+			for(@SuppressWarnings("unused") BookCopy bookCopy: book.getCopies()) {
+				for(LibraryMember mem:memeberList) {
+					for(CheckoutEntry entry: mem.getCheckoutRecord().getCheckoutEntry()) {
+						if(entry.getDueDate().isBefore(LocalDate.now()) && entry.getBookCopy().getBook().equals(book)) {
+							
+							overDueList.add(new BookOverDue(
+															book.getIsbn(),book.getTitle(),
+															entry.getBookCopy().getCopyNum(),
+															mem.getFirstName()+" " + mem.getLastName(),
+															entry.getDueDate()
+															));
+						}
+						else
+							System.out.println("No record found");
+					}					
+				}				
 			}
 			
-		}
+			//********************************************************
+			
+			TableView<String> table = new TableView<String>();
+		    TableView<BookOverDue> overDueTableView = new TableView<>();
+
+			TableColumn<BookOverDue,String> isbnCol = new TableColumn<>("ISBN");
+			 TableColumn<BookOverDue,String> bookTitleCol = new TableColumn<>("Title");
+			 TableColumn<BookOverDue,Integer> copyNumCol = new TableColumn<>("Copy No.");
+			 TableColumn<BookOverDue,String> memeberCol = new TableColumn<>("Member Name");
+			 TableColumn<BookOverDue,LocalDate > duedateeCol = new TableColumn<>("Due Date.");
+
+			 isbnCol.setCellValueFactory(new PropertyValueFactory<>("bookIsbn"));
+			 bookTitleCol.setCellValueFactory(new PropertyValueFactory<>("bookTitle"));		
+			 copyNumCol.setCellValueFactory(new PropertyValueFactory<>("copyNum"));		
+			 memeberCol.setCellValueFactory(new PropertyValueFactory<>("libraryMember"));		
+			 duedateeCol.setCellValueFactory(new PropertyValueFactory<>("dueDate"));	
+
+			 overDueTableView.getColumns().setAll(isbnCol, bookTitleCol, copyNumCol, memeberCol,duedateeCol);
+			 CopyOverDue.booksTableView.getColumns().setAll(isbnCol, bookTitleCol, copyNumCol, memeberCol,duedateeCol);
+		     @SuppressWarnings("rawtypes")
+			ObservableList data = FXCollections.observableList(overDueList);
+		     overDueTableView.setItems(data);
+			 
+			 isbnCol.setSortType(TableColumn.SortType.DESCENDING);
+			 
+			 TableView<Book>  bookTable = new TableView<>();		
+			 TableView<LibraryMember>  memberTable = new TableView<>();
+			 CopyOverDue.getGrid().add(overDueTableView,  0, 2,5,1);
+			 CopyOverDue.booksTableView.setItems(data);
+					
+			//********************************************************
+		}				
+		
+		
 		
 		//lists all over due books /*** to be done ***/
-		public List<String> overDueBooks(){
+		public List<String> allOverDueBooks(){
 		
 			DataAccess da = new DataAccessFacade();
 			HashMap<String, Book> booksHashMap = da.readBooksMap();
@@ -294,8 +359,7 @@ public class SystemController implements ControllerInterface {
 						checkedoutBookList.add(book);
 				}
 			}
-			
-			
+				
 			
 			HashMap<String, LibraryMember> memeberHashMap = da.readMemberMap();
 			List<LibraryMember> memeberList = new ArrayList<>();
@@ -314,6 +378,11 @@ public class SystemController implements ControllerInterface {
 				// TO DO(user stream)
 			}
 						
+			return null;
+		}
+		@Override
+		public List<String> overDueBooks() {
+			// TODO Auto-generated method stub
 			return null;
 		}
 }

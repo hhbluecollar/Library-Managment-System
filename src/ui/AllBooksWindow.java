@@ -93,8 +93,6 @@ public class AllBooksWindow extends Stage implements LibWindow {
         	public void handle(ActionEvent e) {
         		NewStart.resetWindow();
           	}
-        });
-		
-        isInitialized(true);
+        });		
 	}
 }

@@ -149,10 +149,10 @@ public class DataAccessFacade implements DataAccess {
 
 
 	@Override
-	public void saveNewBookCopy(BookCopy bookCopy) {
+	public void saveNewBookCopy(Book book) {
 		// TODO Auto-generated method stub
-		bookCopy.getBook().addCopy();
-		updateBook(bookCopy.getBook().getIsbn(), bookCopy.getBook());
+		//bookCopy.getBook().addCopy();
+		updateBook(book.getIsbn(), book);
 	}
 
 	@Override

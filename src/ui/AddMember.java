@@ -118,7 +118,7 @@ public class AddMember extends Stage implements LibWindow{
 	        		
 	        
 	        		try {     			
-	        			if(c.searchMemberById(membreTextField.getText().trim())!=null)
+	        			if(c.searchMemberByIdIsAvaialable(membreTextField.getText().trim()))
 		        			throw new LibrarySystemException("This member is already in the system!");
 	        			Address address = new Address(streetTextField.getText().trim(), 
 	        										  cityTextField.getText().trim(), 
@@ -138,8 +138,7 @@ public class AddMember extends Stage implements LibWindow{
 	        		} catch(Exception ex) {
 	        			messageBar.setFill(NewStart.Colors.red);
 	        			messageBar.setText(ex.getMessage());
-	        		}
-	        	   
+	        		}	        	   
 	        	}
 	        });
 	        

@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
@@ -26,10 +27,12 @@ public class NewStart extends Application{
         public  static Hyperlink allMemeberId = new Hyperlink("All Members Info");
         public  static Hyperlink allBookId = new Hyperlink("All Books Info");
         public  static Hyperlink addBookCopy = new Hyperlink("Add Book Copy");
+        public  static Hyperlink overDueCheck = new Hyperlink("Check Book OverDue");
+
         public  static BorderPane topContainer;
         public  static GridPane leftContainer;
         public  static GridPane rightContainer;        
-        public  static Button  logoutBtn = new Button("Logout");        
+        public  static Button  logoutBtn = new Button("Logout");       
 
 	
 	public static void main(String[] args) {
@@ -59,6 +62,7 @@ public class NewStart extends Application{
 			checkoutBook.setDisable(true);
 			addBook.setDisable(true);
 			addBookCopy.setDisable(true);
+			overDueCheck.setDisable(true);
 			allBookId.setDisable(true);
 			addMember.setDisable(true);
 			searchEditMem.setDisable(true);
@@ -82,18 +86,19 @@ public class NewStart extends Application{
 			leftContainer.setPadding(new Insets(10,10,10,10));
 			
 			//Populate left container
-			leftContainer.add(login, 1, 4); 
-			leftContainer.add(addMember, 1, 5); 	 addMember.setDisable(true);
-			leftContainer.add(searchEditMem, 1, 6);	 searchEditMem.setDisable(true);
-			leftContainer.add(checkoutBook, 1, 7);	 checkoutBook.setDisable(true);
-			leftContainer.add(addBook, 1, 8);		 addBook.setDisable(true);
-			leftContainer.add(checkoutStatus, 1, 9); checkoutStatus.setDisable(true);
-			leftContainer.add(allMemeberId, 1, 10);	 allMemeberId.setDisable(true);
-			leftContainer.add(allBookId, 1, 11);	 allBookId.setDisable(true);
-			leftContainer.add(addBookCopy, 1, 12);	 addBookCopy.setDisable(true);			
-			leftContainer.add(logoutBtn, 1, 17);     logoutBtn.setVisible(false);
+			leftContainer.add(login, 1, 2); 
+			leftContainer.add(addMember, 1, 3); 	 addMember.setDisable(true);
+			leftContainer.add(searchEditMem, 1, 4);	 searchEditMem.setDisable(true);
+			leftContainer.add(checkoutBook, 1, 5);	 checkoutBook.setDisable(true);
+			leftContainer.add(addBook, 1, 6);		 addBook.setDisable(true);
+			leftContainer.add(checkoutStatus, 1, 7); checkoutStatus.setDisable(true);
+			leftContainer.add(allMemeberId, 1, 8);	 allMemeberId.setDisable(true);
+			leftContainer.add(allBookId, 1, 9);	 allBookId.setDisable(true);
+			leftContainer.add(addBookCopy, 1, 10);	 addBookCopy.setDisable(true);			
+			leftContainer.add(logoutBtn, 1, 14,2,1);     logoutBtn.setVisible(false);
+			leftContainer.add(overDueCheck, 1, 11);   overDueCheck.setDisable(true);
 			logoutBtn.setMinSize(10, 2); 			
-			
+			logoutBtn.setAlignment(Pos.BOTTOM_RIGHT);
 			rightContainer = new GridPane();
 			rightContainer.setId("right-container");
 			
@@ -165,6 +170,13 @@ public class NewStart extends Application{
 		    			}
 		    			topContainer.setCenter(AllMembersWindow.getGrid());
 					}
+					
+					if(clickedLink.equals(overDueCheck)) {
+						if(!CopyOverDue.INSTANCE.isInitialized()) {
+							CopyOverDue.INSTANCE.init();
+		    			}
+		    			topContainer.setCenter(CopyOverDue.getGrid());
+					}
 				}		    
 		    };
 		    
@@ -176,6 +188,7 @@ public class NewStart extends Application{
 		    addBookCopy.setOnAction(myHandler);
 		    allBookId.setOnAction(myHandler);
 		    allMemeberId.setOnAction(myHandler);
+		    overDueCheck.setOnAction(myHandler);
 		    
 			login.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
