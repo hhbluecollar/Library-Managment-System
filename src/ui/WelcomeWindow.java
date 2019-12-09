@@ -48,7 +48,6 @@ public class WelcomeWindow extends Stage implements LibWindow{
 		        VBox splashVBox = new VBox();
 		        splashVBox.setMinSize(500, 30);
 		        splashVBox.setId("spalsh-box");
-			   // splashVBox.setBackground(Background.EMPTY);
 		        splashVBox.autosize();
 		        Text splashLabelSub = new Text("Please select a task");
 		        Text splashLabel = new Text("Welcome To Legeta Library System");

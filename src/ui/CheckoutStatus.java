@@ -1,36 +1,26 @@
 
 package ui;
 
-import java.util.Collections;
-import java.util.List;
 
-import business.Book;
-import business.BookCopy;
-import business.CheckoutEntry;
 import business.ControllerInterface;
-import business.LibraryMember;
-import business.LoginException;
 import business.SystemController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import jdk.internal.org.objectweb.asm.tree.IntInsnNode;
+
 
 public class CheckoutStatus extends Stage implements LibWindow {
 	public static final CheckoutStatus INSTANCE = new CheckoutStatus();
@@ -65,9 +55,7 @@ public class CheckoutStatus extends Stage implements LibWindow {
 
         Text scenetitle = new Text("Checkout Record Status:");
         scenetitle.setFont(Font.font("Harlow Solid Italic", FontWeight.NORMAL, 20)); //Tahoma
-        grid.add(scenetitle, 0, 0, 2, 1);
-        
-        //********************************//
+        grid.add(scenetitle, 0, 0, 2, 1);        
         
         TextField memberIdField;   
         TextArea statusArea;
@@ -104,10 +92,10 @@ public class CheckoutStatus extends Stage implements LibWindow {
         	    			NewStart.topContainer.setCenter(getGrid()
         	    		);      			
         		
-        			messageBar.setFill(Start.Colors.green);
+        			messageBar.setFill(NewStart.Colors.green);
              	    messageBar.setText("Record successfully found");
         		} catch(Exception ex) {
-        			messageBar.setFill(Start.Colors.red);
+        			messageBar.setFill(NewStart.Colors.red);
         			messageBar.setText( ex.getMessage());
         		}        	   
         	}

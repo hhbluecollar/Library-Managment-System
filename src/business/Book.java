@@ -7,9 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-/**
- *
- */
+
 final public class Book implements Serializable {
 	
 	private static final long serialVersionUID = 6110690276685962829L;
@@ -18,6 +16,21 @@ final public class Book implements Serializable {
 	private String isbn;
 	private String title;
 	private int maxCheckoutLength;
+	
+	@SuppressWarnings("unused")
+	private int copiesNo;
+	@SuppressWarnings("unused")
+	private int authorsNo;
+	
+	
+	public int getCopiesNo() {
+		return copies.length;
+	}
+
+	public int getAuthorsNo() {
+		return authors.size();
+	}
+
 	public Book(String isbn, String title, int maxLength, List<Author> authors) {
 		this.isbn = isbn;
 		this.title = title;

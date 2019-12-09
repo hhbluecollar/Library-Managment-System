@@ -3,11 +3,18 @@ package business;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.sun.scenario.effect.FloatMap;
-import com.sun.swing.internal.plaf.metal.resources.metal_zh_TW;
+import javax.swing.JComboBox.KeySelectionManager;
+
+import com.sun.corba.se.impl.encoding.OSFCodeSetRegistry.Entry;
+import com.sun.javafx.collections.MappingChange.Map;
+import com.sun.org.apache.xalan.internal.xsltc.runtime.BasisLibrary;
 
 import dataaccess.Auth;
 import dataaccess.DataAccess;
@@ -64,19 +71,17 @@ public class SystemController implements ControllerInterface {
 		
 	}
 	@Override
-	public List<String> allMemberIds() {
+	public HashMap<String, LibraryMember> allMemberIds() {
 		DataAccess da = new DataAccessFacade();
-		List<String> retval = new ArrayList<>();
-		retval.addAll(da.readMemberMap().keySet());
-		return retval;
+		HashMap<String, LibraryMember> memHashMap = da.readMemberMap();
+		return memHashMap;
 	}
 	
 	@Override
-	public List<String> allBookIds() {
-		DataAccess da = new DataAccessFacade();
-		List<String> retval = new ArrayList<>();
-		retval.addAll(da.readBooksMap().keySet());
-		return retval;
+	public HashMap<String, Book> allBookIds() {
+		DataAccess da = new DataAccessFacade();		
+		HashMap<String, Book> booksHashMap = da.readBooksMap();
+		return 	booksHashMap;
 	}
 	
 	@Override
@@ -126,7 +131,7 @@ public class SystemController implements ControllerInterface {
 		DataAccess da = new DataAccessFacade();
 		
 		//if the book is already added notify
-		/*
+		/* TO DO!!
 		//Lets check the fields are there
 		if(book.getAuthors().size()==0)
 			throw new LibrarySystemException("Please provide at least one author.");
@@ -173,7 +178,6 @@ public class SystemController implements ControllerInterface {
 		LibraryMember member = searchMemberById(memberId);
 
 		List<CheckoutEntry> checkOuts = member.getCheckoutRecord().getCheckoutEntry();
-		System.out.println(checkOuts.size());
 
 		StringBuilder sb = new StringBuilder();
 		int bkNo =0;
@@ -189,7 +193,6 @@ public class SystemController implements ControllerInterface {
 		return sb.toString();
 	}
 	
-	//-------------------------------------------------------
 		@Override
 		public void checkoutBook(String memID, String isbn) throws LibrarySystemException {
 			
@@ -217,7 +220,6 @@ public class SystemController implements ControllerInterface {
 				isAvailable = bk[i].isAvailable();
 
 				if(isAvailable == true) {
-					//nextAvailCopy = bk[i].getCopyNum(); //for check
 					copy = bk[i];
 					break;
 				}
@@ -250,9 +252,68 @@ public class SystemController implements ControllerInterface {
 				throw new LibrarySystemException("The number of copy must be integer value.");	
 			}
 			//Add each copy number to be added
-			Book book = searchBookByIsbn(isbn);
-			for(int i = 0;i<Integer.parseInt(copyNum);i++) {					
-				book.addCopy();				
+			Book book;
+			try{
+				 book = searchBookByIsbn(isbn);		
+			
+				 for(int i = 0;i<Integer.parseInt(copyNum);i++) {					
+					 book.addCopy();				
+				 }
+			}catch(LibrarySystemException ex) {
+				throw new LibrarySystemException("The book was not found.");
 			}
-		}		
+			BookCopy bookCopy = new  BookCopy(book, Integer.parseInt(copyNum),true);
+			DataAccess da = new DataAccessFacade();
+			da.saveNewBookCopy(bookCopy);
+		}	
+		
+		
+		public void overdueCheck(String isbn) throws LibrarySystemException {
+			Book book = searchBookByIsbn(isbn);
+			List<Book> checkoutBookList = new ArrayList<>();
+
+			for(BookCopy bookCopy: book.getCopies()) {
+				if(bookCopy.isAvailable()==false)
+					checkoutBookList.add(book);
+			}
+			
+		}
+		
+		//lists all over due books /*** to be done ***/
+		public List<String> overDueBooks(){
+		
+			DataAccess da = new DataAccessFacade();
+			HashMap<String, Book> booksHashMap = da.readBooksMap();
+			List<Book> bookList = new ArrayList<>();
+			bookList.addAll(booksHashMap.values());
+			List<Book> checkedoutBookList = new ArrayList<>();
+			
+			for(Book book: bookList) {
+				for(BookCopy bookCopy: book.getCopies()) {
+					if(bookCopy.isAvailable()==false)
+						checkedoutBookList.add(book);
+				}
+			}
+			
+			
+			
+			HashMap<String, LibraryMember> memeberHashMap = da.readMemberMap();
+			List<LibraryMember> memeberList = new ArrayList<>();
+			memeberList.addAll(memeberHashMap.values());
+			List<LibraryMember> memWithOverDueBookList = new ArrayList<>();
+			
+			for(LibraryMember mem:memeberList) {
+				for(CheckoutEntry entry: mem.getCheckoutRecord().getCheckoutEntry()) {
+					if(entry.getDueDate().isBefore(LocalDate.now())) {
+						memWithOverDueBookList.add(mem);
+					}
+				}					
+			}
+			
+			for (LibraryMember libraryMember : memWithOverDueBookList) {
+				// TO DO(user stream)
+			}
+						
+			return null;
+		}
 }

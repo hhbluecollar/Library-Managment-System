@@ -20,9 +20,7 @@ import javafx.stage.Stage;
 
 public class LoginWindow extends Stage implements LibWindow {
 	
-	
-	
-	private static final long serialVersionUID = -6285527764386970939L;
+		
 
 	public static final LoginWindow INSTANCE = new LoginWindow();
 	
@@ -91,11 +89,11 @@ public class LoginWindow extends Stage implements LibWindow {
         			NewStart.logoutBtn.setVisible(true);
         			ControllerInterface c = new SystemController();
         			c.login(userTextField.getText().trim(), pwBox.getText().trim());        			
-        			messageBar.setFill(Start.Colors.green);
+        			messageBar.setFill(NewStart.Colors.green);
              	    messageBar.setText("Login successful");
 
         		} catch(LoginException ex) {
-        			messageBar.setFill(Start.Colors.red);
+        			messageBar.setFill(NewStart.Colors.red);
         			messageBar.setText(ex.getMessage());
         		}
         	   

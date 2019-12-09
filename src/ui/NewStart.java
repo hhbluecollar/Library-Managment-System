@@ -1,10 +1,5 @@
 package ui;
 
-import java.util.Collections;
-import java.util.List;
-
-
-import business.ControllerInterface;
 import business.SystemController;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -13,6 +8,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -26,9 +22,9 @@ public class NewStart extends Application{
         public  static Hyperlink searchEditMem =  new Hyperlink("Search\\Edit Memeber");
         public  static Hyperlink checkoutBook = new Hyperlink("Checkout Book");
         public  static Hyperlink addBook = new Hyperlink("Add Book");
-        public  static Hyperlink checkoutStatus = new Hyperlink("Check Book Status");
-        public  static Hyperlink allMemeberId = new Hyperlink("All Members ID");
-        public  static Hyperlink allBookId = new Hyperlink("All Books ID");
+        public  static Hyperlink checkoutStatus = new Hyperlink("Checkout Record Status");
+        public  static Hyperlink allMemeberId = new Hyperlink("All Members Info");
+        public  static Hyperlink allBookId = new Hyperlink("All Books Info");
         public  static Hyperlink addBookCopy = new Hyperlink("Add Book Copy");
         public  static BorderPane topContainer;
         public  static GridPane leftContainer;
@@ -40,6 +36,7 @@ public class NewStart extends Application{
 			launch(args);
 		}
 		private static Stage primStage = null;
+		
 		public static Stage primStage() {
 			return primStage;
 		}
@@ -48,18 +45,14 @@ public class NewStart extends Application{
 			static Color green = Color.web("#034220");
 			static Color red = Color.FIREBRICK;
 		}
-
-/*		private static Stage[] allWindows = { 
-			LoginWindow.INSTANCE,
-			AllMembersWindow.INSTANCE,	
-			AllBooksWindow.INSTANCE,
-		};	
-*/						
-		//************************************
+		private void handleWindowClosing() {
+			
+			primStage.setOnCloseRequest(event -> System.exit(0));            
+	      				
+		}			
 		public static void resetWindow() {
     		SystemController.currentAuth=null;
-    		//if(WelcomeWindow.INSTANCE==null)
-    			WelcomeWindow.INSTANCE.init();
+    		WelcomeWindow.INSTANCE.init();
 			topContainer.setCenter(WelcomeWindow.getGrid());
 			WelcomeWindow.INSTANCE.clear();
 
@@ -75,7 +68,6 @@ public class NewStart extends Application{
      	    logoutBtn.setVisible(false);
 		}
 		
-		//************************************
 		@Override
 		public void start(Stage primaryStage) {
 			primStage = primaryStage;
@@ -143,7 +135,7 @@ public class NewStart extends Application{
 						if(!SearchMember.INSTANCE.isInitialized()) {
 							SearchMember.INSTANCE.init();
 						}
-						SearchMember.INSTANCE.getMessageBar().setFill(Start.Colors.green);
+						SearchMember.INSTANCE.getMessageBar().setFill(NewStart.Colors.green);
 						SearchMember.INSTANCE.getMessageBar().setText("Insert member id to search.");			    								
 		    			topContainer.setCenter(SearchMember.getGrid());
 					}
@@ -160,7 +152,19 @@ public class NewStart extends Application{
 		    			}
 						CheckoutStatus.INSTANCE.clear();
 		    			topContainer.setCenter(CheckoutStatus.getGrid());
-					}			
+					}	
+					if(clickedLink.equals(allBookId)) {
+						if(!AllBooksWindow.INSTANCE.isInitialized()) {
+							AllBooksWindow.INSTANCE.init();
+		    			}
+		    			topContainer.setCenter(AllBooksWindow.getGrid());
+					}	
+					if(clickedLink.equals(allMemeberId)) {
+						if(!AllMembersWindow.INSTANCE.isInitialized()) {
+							AllMembersWindow.INSTANCE.init();
+		    			}
+		    			topContainer.setCenter(AllMembersWindow.getGrid());
+					}
 				}		    
 		    };
 		    
@@ -170,7 +174,9 @@ public class NewStart extends Application{
 		    addBook.setOnAction(myHandler);
 		    checkoutStatus.setOnAction(myHandler);
 		    addBookCopy.setOnAction(myHandler);
-
+		    allBookId.setOnAction(myHandler);
+		    allMemeberId.setOnAction(myHandler);
+		    
 			login.setOnAction(new EventHandler<ActionEvent>() {
 	            @Override
 	            public void handle(ActionEvent e) {
@@ -180,45 +186,7 @@ public class NewStart extends Application{
 	    			LoginWindow.INSTANCE.clear();
 	    			topContainer.setCenter(LoginWindow.getGrid());			
 	            }
-	        });			
-								
-			allBookId.setOnAction(new EventHandler<ActionEvent>() {
-	            @Override
-	            public void handle(ActionEvent e) {
-					if(!AllBooksWindow.INSTANCE.isInitialized()) {
-						AllBooksWindow.INSTANCE.init();
-					}
-					ControllerInterface ci = new SystemController();
-					List<String> ids = ci.allBookIds();
-					Collections.sort(ids);
-
-					StringBuilder sb = new StringBuilder();
-					for(String s: ids) {
-						sb.append(s + "\n");
-					}
-					AllBooksWindow.INSTANCE.setData(sb.toString());
-	    			topContainer.setCenter(AllBooksWindow.getGrid());				
-	            }
-			});
-			
-			allMemeberId.setOnAction(new EventHandler<ActionEvent>() {
-	            @Override
-	            public void handle(ActionEvent e) {
-					if(!AllMembersWindow.INSTANCE.isInitialized()) {
-						AllMembersWindow.INSTANCE.init();
-					}
-					ControllerInterface ci = new SystemController();
-					List<String> ids = ci.allMemberIds();
-					Collections.sort(ids);
-					StringBuilder sb = new StringBuilder();
-					for(String s: ids) {
-						sb.append(s + "\n");
-					}
-					AllMembersWindow.INSTANCE.setData(sb.toString());
-	    			topContainer.setCenter(AllMembersWindow.getGrid());				
-	            }
-			});	
-		
+	        });	
 			
 			if(!WelcomeWindow.INSTANCE.isInitialized()) {
 				WelcomeWindow.INSTANCE.init();
@@ -227,10 +195,12 @@ public class NewStart extends Application{
 			rightContainer.add(WelcomeWindow.getGrid(), 0, 0);
 			topContainer.setLeft(leftContainer);
 			topContainer.setCenter(rightContainer);				
+			primaryStage.getIcons().add(new Image(this.getClass().getResourceAsStream("icon.png")));
 
 			Scene scene = new Scene(topContainer,800,600);
 			primaryStage.setScene(scene);
 			scene.getStylesheets().add(getClass().getResource("library.css").toExternalForm());
+			handleWindowClosing();
 			primaryStage.show();
 		}		
 }

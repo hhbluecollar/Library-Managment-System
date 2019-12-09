@@ -4,9 +4,6 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 
-import dataaccess.DataAccess;
-import dataaccess.DataAccessFacade;
-
 final public class LibraryMember extends Person implements Serializable {
 	private String memberId;
 	private CheckoutRecord checkoutRecord;
@@ -22,7 +19,6 @@ final public class LibraryMember extends Person implements Serializable {
 	}	
 	
 	
-	//-------------------------------------------------------------------------
 	public void checkout(BookCopy copy, LocalDate date, LocalDate returnDate) {
 		CheckoutEntry checkoutEntry = new CheckoutEntry(date, returnDate, copy);
 		checkoutRecord.addEntry(checkoutEntry);

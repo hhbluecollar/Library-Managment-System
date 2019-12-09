@@ -2,22 +2,17 @@ package ui;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.omg.CORBA.PRIVATE_MEMBER;
-
 import business.Address;
 import business.Author;
 import business.Book;
 import business.ControllerInterface;
 import business.LibrarySystemException;
 import business.SystemController;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -34,8 +29,7 @@ import javafx.stage.Stage;
 public class AddBook extends Stage implements LibWindow {
 	public static final AddBook INSTANCE = new AddBook();
 	 
-	 //*************author and address fields
-	 
+ 
      TextField fNameField;
      TextField lNameField;
      TextField telephoneField;
@@ -80,7 +74,6 @@ public class AddBook extends Stage implements LibWindow {
 	/* This class is a singleton */
     private AddBook () {}
     
-    @SuppressWarnings("unchecked")
 	public void init() { 
         grid = new GridPane();
         grid.setId("top-container");
@@ -145,31 +138,33 @@ public class AddBook extends Stage implements LibWindow {
         addBookBtn.setOnAction(new EventHandler<ActionEvent>() {
         	@Override
         	public void handle(ActionEvent e) {
-        		try {  		
-	        		//***********************************************
+        		try {  	
+        				ControllerInterface c = new SystemController();
         				if(isbnTextField.getText().trim().isEmpty()||
         				   titleTextField.getText().trim().isEmpty()) {
         	    			
         					throw new LibrarySystemException("All book fields must be provided.");	
-        				}        				
+        				}        
+        				
+        				if(c.searchBookByIsbn(isbnTextField.getText().trim())!=null)
+        					throw new LibrarySystemException("The book is already in the system!");
+
         					
         				if(!isbnTextField.getText().trim().matches("[0-9-]*"))
     				
     					    throw new LibrarySystemException("The ISBN format is not correct number.");	
     			
         				authorRead();
-	        		//***********************************************	        		    		
 	        			        		
         			Book book = new  Book(isbnTextField.getText().trim(), 
         								  titleTextField.getText().trim(), 
         							      maxCheckoutComboBox.getValue(),
         							      authors);
-        			ControllerInterface c = new SystemController();
         			c.addBook(book);
-        			messageBar.setFill(Start.Colors.green);
+        			messageBar.setFill(NewStart.Colors.green);
              	    messageBar.setText("Adding Book successful");
         		} catch(LibrarySystemException ex) {
-        			messageBar.setFill(Start.Colors.red);
+        			messageBar.setFill(NewStart.Colors.red);
         			messageBar.setText(ex.getMessage());
         		}        	   
         	}
@@ -202,7 +197,7 @@ public class AddBook extends Stage implements LibWindow {
 							authorRead();
 							clearTextFields();
 					} catch (LibrarySystemException ex) {
-	        			messageBar.setFill(Start.Colors.red);
+	        			messageBar.setFill(NewStart.Colors.red);
 	        			messageBar.setText(ex.getMessage());					}
 	        	}
    }
@@ -213,7 +208,8 @@ public class AddBook extends Stage implements LibWindow {
         return buttons;
     }
     
-    private final void authorRead() throws LibrarySystemException {		
+    @SuppressWarnings("unused")
+	private final void authorRead() throws LibrarySystemException {		
 
 		if(
 			streetTextField.getText().trim().isEmpty()|| cityTextField.getText().trim().isEmpty() ||

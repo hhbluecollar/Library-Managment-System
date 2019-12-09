@@ -1,22 +1,16 @@
 package ui;
 
-import business.Book;
-import business.BookCopy;
 import business.ControllerInterface;
-import business.LoginException;
 import business.SystemController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -89,10 +83,10 @@ public class AddBookCopy extends Stage implements LibWindow {
         			String isbn = isbnTextField.getText().trim();
         			c.addBookCopy(isbn, copyNum); 
         			
-        			messageBar.setFill(Start.Colors.green);
+        			messageBar.setFill(NewStart.Colors.green);
              	    messageBar.setText("Adding copy successfully");
         		} catch(Exception ex) {
-        			messageBar.setFill(Start.Colors.red);
+        			messageBar.setFill(NewStart.Colors.red);
         			messageBar.setText(ex.getMessage());
         		}
         	   

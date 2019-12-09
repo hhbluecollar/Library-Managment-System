@@ -3,12 +3,12 @@ package ui;
 import business.Address;
 import business.ControllerInterface;
 import business.LibraryMember;
+import business.LibrarySystemException;
 import business.SystemController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -113,8 +113,13 @@ public class AddMember extends Stage implements LibWindow{
 	        addMemberBtn.setOnAction(new EventHandler<ActionEvent>() {
 	        	@Override
 	        	public void handle(ActionEvent e) {
-	        		try {        			
-	        			
+        			
+	        		ControllerInterface c = new SystemController();
+	        		
+	        
+	        		try {     			
+	        			if(c.searchMemberById(membreTextField.getText().trim())!=null)
+		        			throw new LibrarySystemException("This member is already in the system!");
 	        			Address address = new Address(streetTextField.getText().trim(), 
 	        										  cityTextField.getText().trim(), 
 	        										  statetTextField.getText().trim(), 
@@ -127,12 +132,11 @@ public class AddMember extends Stage implements LibWindow{
 	        									telNoTextField.getText().trim(),
 	        									address
 	        									);
-	        			ControllerInterface c = new SystemController();
 	        			c.addMember(member,true);
-	        			messageBar.setFill(Start.Colors.green);
+	        			messageBar.setFill(NewStart.Colors.green);
 	             	    messageBar.setText("Member successfuly Added");
 	        		} catch(Exception ex) {
-	        			messageBar.setFill(Start.Colors.red);
+	        			messageBar.setFill(NewStart.Colors.red);
 	        			messageBar.setText(ex.getMessage());
 	        		}
 	        	   

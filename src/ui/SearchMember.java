@@ -119,19 +119,16 @@ public class SearchMember extends Stage implements LibWindow {
         									);
         			ControllerInterface c = new SystemController();
         			c.addMember(member,false);
-        			messageBar.setFill(Start.Colors.green);
+        			messageBar.setFill(NewStart.Colors.green);
              	    messageBar.setText("Member successfuly updated");
              	    memberIdField.setEditable(true);
         		} catch(Exception ex) {
-        			messageBar.setFill(Start.Colors.red);
+        			messageBar.setFill(NewStart.Colors.red);
         			messageBar.setText(ex.getMessage());
         		}        	   
         	}        	
-        });
-              
-        
-        //-------------------------------------------------------
-         
+        });            
+                 
         searchBtn.setOnAction(new EventHandler<ActionEvent>() {
         	@Override
         	public void handle(ActionEvent e) {
@@ -149,17 +146,16 @@ public class SearchMember extends Stage implements LibWindow {
         	         statetTextField.setText(member.getAddress().getState());
         	         zipTextField.setText(member.getAddress().getZip());
         		
-        			messageBar.setFill(Start.Colors.green);
+        			messageBar.setFill(NewStart.Colors.green);
              	    messageBar.setText("Member successfully found");
              	    memberIdField.setEditable(false);
         		} catch(NullPointerException | LibrarySystemException ex) {
-        			messageBar.setFill(Start.Colors.red);
+        			messageBar.setFill(NewStart.Colors.red);
         			messageBar.setText(ex.getMessage());
         		}        	   
         	}
         }); 
           
-         //----------------------------------------------------------
         
         NewStart.logoutBtn.setOnAction(new EventHandler<ActionEvent>() {
         	@Override 
